@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AppareilService} from './services/appareil.service';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/interval';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -8,21 +11,8 @@ import {AppareilService} from './services/appareil.service';
 })
 export class AppComponent implements OnInit {
   isAuth = false;
-
-  appareils = [
-    {
-      name: 'Machine à laver',
-      status: 'éteint'
-    },
-    {
-      name: 'Frigo',
-      status: 'allumé'
-    },
-    {
-      name: 'Ordinateur',
-      status: 'éteint'
-    }
-  ];
+  secondes: number;
+  counterSubscription: Subscription;
 
   constructor(private appareilService: AppareilService) {
     setTimeout(
@@ -32,6 +22,22 @@ export class AppComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    const counter = Observable.interval(1000);
+    this.counterSubscription = counter.subscribe(
+      (value) => {
+        this.secondes = value;
+      },
+      (error) => {
+        console.log('Uh-oh, an error occurred! : ' + error);
+      },
+      () => {
+        console.log('Observable complete!');
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.counterSubscription.unsubscribe();
   }
 }

@@ -7,6 +7,7 @@ import {ActivatedRoute} from '@angular/router';
   templateUrl: './single-appareil.component.html',
   styleUrls: ['./single-appareil.component.scss']
 })
+
 export class SingleAppareilComponent implements OnInit {
 
   name = 'Appareil';
